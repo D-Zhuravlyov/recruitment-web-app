@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+        'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<!-- Instead of referencing Fully Qualified Class Names we can register Aliases in mybatis-config.xml and use Alias names. -->
+<mapper namespace='rwr.mapper.ContactsMapper'>
+
+    <!-- All Contacts -->
+  <resultMap id="AllContactsResult" type="Contact">
+      <association property="email" resultMap="EmailResult"/>
+      <association property="address" resultMap="AddressResult"/>
+      <association property="phone" resultMap="PhoneResult"/>
+      <association property="ims" resultMap="IMSResult"/>
+  </resultMap>
+
+    <select id="getAllContacts" parameterType="Integer" resultMap="AllContactsResult">
+        SELECT Email.*, Address.*, Phone.*, IMS.*
+        FROM Email
+        JOIN Address
+        ON Address.candidate_id = Email.candidate_id
+        JOIN Phone
+        ON Phone.candidate_id = Address.candidate_id
+        JOIN IMS
+        ON IMS.candidate_id = Email.candidate_id
+        WHERE Address.candidate_id =#{candidateId}
+        AND Email.candidate_id=#{candidateId}
+        AND Phone.candidate_id=#{candidateId}
+        AND IMS.candidate_id=#{candidateId}
+    </select>
+
+    <!-- Email -->
+    <resultMap type='Email' id='EmailResult'>
+        <id property='emailId' column='email_id'/>
+        <result property='emailAddr' column='emailAddr'/>
+        <result property='altEmail' column='alt_email'/>
+    </resultMap>
+
+    <select id="getEmail" parameterType="Integer" resultMap="EmailResult">
+        SELECT *
+        FROM Email
+        WHERE candidate_id = #{candidateId}
+    </select>
+
+    <update id="updateEmail" parameterType="Email">
+        UPDATE Email
+        SET
+        emailAddr = #{emailAddr},
+        alt_email = #{altEmail}
+        WHERE candidate_id = #{candidateId}
+    </update>
+
+    <insert id="insertEmail" parameterType="Email">
+        INSERT INTO Email(candidate_id ,emailAddr, alt_email)
+        VALUES(#{candidateId}, #{emailAddr}, #{altEmail})
+    </insert>
+
+    <delete id="removeEmail" parameterType="Integer">
+        DELETE FROM Email WHERE candidate_id = #{candidateId}
+    </delete>
+
+    <!-- Address -->
+    <resultMap type='Address' id='AddressResult'>
+        <id property='addressId' column='address_id'/>
+        <result property='postIndex' column='post_index'/>
+        <result property='city' column='city'/>
+        <result property='country' column='country'/>
+    </resultMap>
+
+    <select id="getAddress" parameterType="Integer" resultMap="AddressResult">
+        SELECT *
+        FROM Address
+        WHERE candidate_id = #{candidateId}
+    </select>
+
+    <update id="updateAddress" parameterType="Address">
+        UPDATE Address
+        SET
+        post_index = #{postIndex},
+        city = #{city},
+        country = #{country}
+        WHERE candidate_id = #{candidateId}
+    </update>
+
+    <insert id="insertAddress" parameterType="Address">
+    INSERT INTO Address(candidate_id, city, country, post_index, street)
+    VALUES(#{candidateId}, #{city}, #{country}, #{postIndex}, #{street} )
+    </insert>
+
+    <delete id="removeAddress" parameterType="Integer">
+        DELETE FROM Address WHERE candidate_id = #{candidateId}
+    </delete>
+
+    <!-- Phone -->
+    <resultMap type='Phone' id='PhoneResult'>
+        <id property='phoneId' column='phone_id'/>
+        <result property='phoneNumber' column='phone_number'/>
+        <result property='altPhoneNumber' column='alt_phone_number'/>
+    </resultMap>
+
+    <select id="getPhone" parameterType="Integer" resultMap="PhoneResult">
+        SELECT *
+        FROM Phone
+        WHERE candidate_id = #{candidateId}
+    </select>
+
+    <update id="updatePhone" parameterType="Phone">
+        UPDATE Phone
+        SET
+        phone_number = #{phoneNumber},
+        alt_phone_number = #{altPhoneNumber},
+        WHERE candidate_id = #{candidateId}
+    </update>
+
+    <insert id="insertPhone" parameterType="Phone">
+      INSERT INTO Phone(candidate_id, phone_number, alt_phone_number)
+      VALUES(#{candidateId}, #{phoneNumber}, #{altPhoneNumber})
+    </insert>
+
+    <delete id="removePhone" parameterType="Integer">
+        DELETE FROM Phone WHERE candidate_id = #{candidateId}
+    </delete>
+
+    <!-- IMS (Instant Messaging System) -->
+    <resultMap type='IMS' id='IMSResult'>
+        <id property='imsId' column='IMS_id'/>
+        <result property='icq' column='icq'/>
+        <result property='jabber' column='jabber'/>
+        <result property='aim' column='aim'/>
+        <result property='msn' column='msn'/>
+    </resultMap>
+
+    <select id="getIms" parameterType="Integer" resultMap="IMSResult">
+        SELECT *
+        FROM IMS
+        WHERE candidate_id = #{candidateId}
+    </select>
+
+    <update id="updateIMS" parameterType="IMS">
+        UPDATE IMS
+        SET
+        icq = #{icq},
+        jabber = #{jabber},
+        aim = #{aim},
+        msn = #{msn},
+        WHERE candidate_id = #{candidateId}
+    </update>
+
+    <insert id="insertIMS" parameterType="IMS">
+      INSERT INTO IMS(candidate_id, icq, jabber, aim, msn)
+      VALUES(#{candidateId}, #{icq}, #{jabber}, #{aim}, #{msn})
+    </insert>
+
+    <delete id="removeIMS" parameterType="Integer">
+      DELETE FROM IMS WHERE candidate_id = #{candidateId}
+    </delete>
+
+
+</mapper>

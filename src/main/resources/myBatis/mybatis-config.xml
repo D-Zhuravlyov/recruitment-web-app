@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE configuration
+        PUBLIC '-//mybatis.org//DTD Config 3.0//EN'
+        'http://mybatis.org/dtd/mybatis-3-config.dtd'>
+<configuration>
+    <properties resource='db.properties'/>
+    <typeAliases>
+        <typeAlias type="rwr.model.Candidate" alias="Candidate"/>
+        <typeAlias type="rwr.model.Skill" alias="Skill"/>
+        <typeAlias type="rwr.model.Contact" alias="Contact"/>
+        <typeAlias type='rwr.model.contact.Email' alias='Email'/>
+        <typeAlias type="rwr.model.contact.IMS" alias="IMS"/>
+        <typeAlias type="rwr.model.contact.Address" alias="Address"/>
+        <typeAlias type="rwr.model.contact.Phone" alias="Phone"/>
+    </typeAliases>
+    <environments default='development'>
+        <environment id='development'>
+            <transactionManager type='JDBC'/>
+            <dataSource type='POOLED'>
+                <property name="driver" value="${db.driver}"/>
+                <property name="url" value="${db.url}"/>
+                <property name="username" value="${db.username}"/>
+                <property name="password" value="${db.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="myBatis/mappers/CandidateMapper.xml"/>
+        <mapper resource="myBatis/mappers/ContactsMapper.xml"/>
+        <mapper resource="myBatis/mappers/SkillMapper.xml"/>
+    </mappers>
+</configuration>

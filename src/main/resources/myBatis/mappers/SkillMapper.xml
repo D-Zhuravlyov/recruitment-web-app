@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+        'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<!-- Instead of referencing Fully Qualified Class Names we can register Aliases in mybatis-config.xml and use Alias names. -->
+<mapper namespace='rwr.mapper.SkillMapper'>
+
+
+    <resultMap type='Skill' id='SkillResult'>
+        <id property='skillId' column='skill_id'/>
+        <result property='skillName' column='skill_name'/>
+        <result property='skillRate' column='skill_rate'/>
+    </resultMap>
+
+    <select id="getSkills" resultMap="SkillResult" parameterType="Integer">
+      SELECT
+	  S.skill_rate, S.skill_name,
+	  C.candidate_id
+	  FROM Skill S LEFT JOIN Candidate C ON C.candidate_id=S.candidate_id
+	  WHERE S.candidate_id = #{candidateId}
+	  ORDER BY skill_rate DESC
+    </select>
+
+    <select id="getTopSkills" resultMap="SkillResult" parameterType="Integer">
+        SELECT TOP 3 skill_rate, skill_name
+        FROM Skill
+        WHERE candidate_id = #{candidateId}
+        ORDER BY skill_rate DESC
+    </select>
+
+    <select id="getUniqueSkills" resultMap="SkillResult">
+      SELECT DISTINCT skill_name FROM Skill;
+    </select>
+
+
+    <update id="updateSkill" parameterType="Skill">
+        UPDATE Skill
+        SET
+        skill_name = #{skillName},
+        skill_rate = #{skillRate}
+        WHERE candidate_id = #{candidateId}
+    </update>
+
+    <insert id="insertSkill" parameterType="Skill">
+        INSERT INTO Skill(skill_name, skill_rate)
+        VALUES (#{skillName}, #{skillRate})
+    </insert>
+
+    <delete id="removeSkill" parameterType="Skill">
+        DELETE FROM Skill
+        WHERE skill_id = #{skillId}
+    </delete>
+
+
+</mapper>

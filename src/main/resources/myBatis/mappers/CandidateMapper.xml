@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC '-//mybatis.org//DTD Mapper 3.0//EN'
+        'http://mybatis.org/dtd/mybatis-3-mapper.dtd'>
+<!-- Instead of referencing Fully Qualified Class Names we can register Aliases in mybatis-config.xml and use Alias names. -->
+<mapper namespace='rwr.mapper.CandidateMapper'>
+
+    <resultMap id='CandidateResult' type='Candidate'>
+        <id property='candidateId' column='candidate_id'/>
+        <result property='firstName' column='first_name'/>
+        <result property='lastName' column='last_name'/>
+        <result property='age' column='age'/>
+        <result property='dateAdded' column='date_added'/>
+        <result property='interviewDate' column='interview_date'/>
+    </resultMap>
+
+    <select id="getAllCandidatesDescByDate" parameterType="Integer" resultMap="CandidateResult">
+        SELECT *
+        FROM Candidate
+        ORDER BY date_added DESC LIMIT #{page}, 20
+    </select>
+
+    <select id="getAllCandidatesAcsByDate" parameterType="Integer" resultMap="CandidateResult">
+        SELECT *
+        FROM Candidate
+        ORDER BY Candidate.date_added ASC LIMIT #{page}, 20
+    </select>
+
+    <select id="getAllCandidatesDescByFirstName" parameterType="Integer" resultMap="CandidateResult">
+        SELECT *
+        FROM Candidate
+        ORDER BY Candidate.first_name DESC LIMIT #{page}, 20
+    </select>
+
+    <select id="getAllCandidatesAcsByFirstName" parameterType="Integer" resultMap="CandidateResult">
+        SELECT *
+        FROM Candidate
+        ORDER BY Candidate.first_name ASC LIMIT #{page}, 20
+    </select>
+
+    <select id="getAllCandidatesDescByLastName" parameterType="Integer" resultMap="CandidateResult">
+        SELECT *
+        FROM Candidate
+        ORDER BY Candidate.last_name DESC LIMIT #{page}, 20
+    </select>
+
+    <select id="getAllCandidatesAcsByLastName" parameterType="Integer" resultMap="CandidateResult">
+        SELECT *
+        FROM Candidate
+        ORDER BY Candidate.last_name ASC LIMIT #{page}, 20
+    </select>
+
+
+    <select id='getCandidateById' parameterType='Integer' resultMap='CandidateResult'>
+        SELECT
+        candidate_id,
+        first_name,
+        last_name,
+        age,
+        date_added,
+        interview_date
+        FROM Candidate
+        WHERE candidate_id = #{candidateId}
+    </select>
+
+    <select id='getAllCandidates' resultMap='CandidateResult'>
+        SELECT * FROM CANDIDATE
+    </select>
+
+    <select id="getRowsCount" resultType="int">
+        SELECT COUNT(*) FROM Candidate
+    </select>
+
+    <insert id='insertCandidate' parameterType='Candidate' useGeneratedKeys='true' keyProperty='id'>
+        INSERT INTO CANDIDATE(first_name, last_name, age)
+        VALUES(#{firstName}, #{lastName}, #{age})
+    </insert>
+
+    <update id='updateCandidate' parameterType='Candidate'>
+        UPDATE Candidate
+        SET
+        first_name = #{firstName},
+        last_name = #{lastName},
+        age = #{age},
+        interview_date = #{interviewDate}
+        WHERE candidate_id = #{candidateId}
+    </update>
+
+    <delete id='removeCandidate' parameterType='Integer'>
+        DELETE FROM Candidate WHERE candidate_id = #{candidateId}
+    </delete>
+
+
+
+</mapper>

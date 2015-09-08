@@ -1,5 +1,6 @@
 # recruitment-web-app
-Web application for CRUD operations on "Candidate" entities. Uses REST api, Mybatis, MySQL DB, Spring MVC
+Web application for CRUD operations on "Candidate" entities. Uses REST api, Mybatis, MySQL DB, Spring MVC.
+
 Main page is the list of all candidates from DB.
 List can be sorted ASC and DESC by First/Last name, Date of adding candidate to database.
 Every candidate has list of contacts and skills.
